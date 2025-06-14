@@ -1,0 +1,12 @@
+
+// Step 0: Arduino Serial Communication Setup
+
+// Upload this code just to see if Serial Monitor and Serial Plotter can be opened
+
+void setup() {
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Empty for now
+}

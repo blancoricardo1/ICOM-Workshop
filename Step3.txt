@@ -1,0 +1,58 @@
+// Step 3: BPM calculation
+
+// Add these variables to your existing code, just like last step.
+
+#define RISE_THRESHOLD 5
+
+float prevAvg = 0;
+bool rising = false;
+int riseCount = 0;
+unsigned long lastBeatTime = 0;
+float lastInterval = 0, secondLast = 0, thirdLast = 0;
+float lastValidBPM = 0;
+
+
+// Copy and paste this function into your code, just like last step.
+
+float detectBeat(float smoothValue) {
+  float bpm = 0;
+
+  if (smoothValue > prevAvg) {
+    riseCount++;
+    if (!rising && riseCount > RISE_THRESHOLD) {
+      rising = true;
+      unsigned long now = millis();
+      float interval = now - lastBeatTime;
+      lastBeatTime = now;
+
+      bpm = 60000.0 / (0.4 * interval + 0.3 * secondLast + 0.3 * thirdLast);
+      thirdLast = secondLast;
+      secondLast = interval;
+
+      lastValidBPM = bpm; 
+    }
+  } else {
+    rising = false;
+    riseCount = 0;
+  }
+
+  prevAvg = smoothValue;
+  return lastValidBPM;
+}
+
+// Edit plotData function like this to pass BPM
+
+void plotData(float signal, float bpm) {
+  Serial.print(signal);
+  Serial.print("\t");
+  Serial.println(bpm);
+}
+
+// Edit your loop function, add a new float variable "bpm" and pass the "smooth" variable as a parameter.
+// Then, update your plotData function call in the loop to pass both the variables
+// We don't want to visualize this in the Serial Plotter, only watch the value in the Serial Monitor
+// Uncheck "value 2" on the serial plotter, visualize BPM in the second column of the Serial Monitor
+
+
+// CONGRATULATIONS, you have built your first functional Embedded System prototype.
+

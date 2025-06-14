@@ -1,0 +1,39 @@
+// Step 2: Smoothing the signal
+
+// First, define these variables near your sensorPin declaration
+
+#define SAMP_SIZ 4
+
+float readings[SAMP_SIZ] = {0};
+int ptr = 0;
+float sum = 0;
+
+// Next, copy and paste the following function
+
+float smoothSignal() {
+  const int SAMP_WINDOW_MS = 20;
+  int count = 0;
+  float total = 0.0;
+  unsigned long start = millis();
+
+  // 1. Average multiple analogReads in 20ms
+  while (millis() - start < SAMP_WINDOW_MS) {
+    total += readSensor();
+    count++;
+  }
+  float avgSample = total / count;
+
+  // 2. Moving average over N samples
+  sum -= readings[ptr];
+  sum += avgSample;
+  readings[ptr] = avgSample;
+  ptr = (ptr + 1) % SAMP_SIZ;
+
+  return sum / SAMP_SIZ;
+}
+
+// Then, call this function into your loop. Do it yourself ;)
+
+// HINT: Variable "raw" is now unused, you can remove it from your loop entirely. 
+// Declare a new variable named smooth, assign the result of smoothSignal() to it, 
+// and pass it to plotData().

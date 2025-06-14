@@ -1,0 +1,24 @@
+// Step 1: Read raw sensor data and plot. 
+
+// Instructions: Copy and paste the given functions and variable into the code given in the last step. 
+// Paste sensorPin variable at the top of your sketch, right before setup().
+
+int sensorPin = 0;
+
+float readSensor() {
+  return analogRead(sensorPin);
+}
+
+void plotData(float raw) {
+  Serial.println(raw);
+}
+
+// Then, change your loop like this
+
+void loop() {
+  float raw = readSensor();
+  plotData(raw);
+  delay(10);
+}
+
+// Upload code to Arduino, open serial plotter, visualize signal. Notice noisy unreadable signal.
