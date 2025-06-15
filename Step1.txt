@@ -5,6 +5,8 @@
 
 int sensorPin = 0;
 
+// Paste the following functions below your loop 
+
 float readSensor() {
   return analogRead(sensorPin);
 }
