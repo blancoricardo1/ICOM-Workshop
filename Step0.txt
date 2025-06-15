@@ -2,6 +2,7 @@
 // Step 0: Arduino Serial Communication Setup
 
 // Upload this code just to see if Serial Monitor and Serial Plotter can be opened
+// If successful, you can open Serial Monitor and send any message to the board and the RX LED should light up
 
 void setup() {
   Serial.begin(9600);
