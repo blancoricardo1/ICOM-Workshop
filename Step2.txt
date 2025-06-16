@@ -11,24 +11,31 @@ float sum = 0;
 // Next, copy and paste the following function
 
 float smoothSignal() {
+  // Duration of the sampling window in milliseconds
   const int SAMP_WINDOW_MS = 20;
+
+  // Variables to keep track of the number of samples and their total
   int count = 0;
   float total = 0.0;
+  // Record the start time of the sampling window
   unsigned long start = millis();
-
-  // 1. Average multiple analogReads in 20ms
+  // Sample the sensor repeatedly for 20ms
   while (millis() - start < SAMP_WINDOW_MS) {
-    total += readSensor();
-    count++;
+    total += readSensor(); // Read from the sensor and add to total
+    count++;               // Increment number of readings taken
   }
+  // Compute the average of all samples taken in the 20ms window
   float avgSample = total / count;
-
-  // 2. Moving average over N samples
+  // ---- Moving Average Smoothing ----
+  // Subtract the oldest sample from the running sum
   sum -= readings[ptr];
+  // Add the new average sample to the running sum
   sum += avgSample;
+  // Store the new sample in the circular buffer
   readings[ptr] = avgSample;
+  // Advance the circular buffer pointer (wrap around if needed)
   ptr = (ptr + 1) % SAMP_SIZ;
-
+  // Return the average of the last SAMP_SIZ samples (moving average)
   return sum / SAMP_SIZ;
 }
 
