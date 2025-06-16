@@ -2,7 +2,7 @@
 
 // First, define these variables near your sensorPin declaration
 
-#define SAMP_SIZ 4
+#define SAMP_SIZ 8
 
 float readings[SAMP_SIZ] = {0};
 int ptr = 0;
