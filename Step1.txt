@@ -15,12 +15,23 @@ void plotData(float raw) {
   Serial.println(raw);
 }
 
-// Then, change your loop like this
+// Your new code should look like this
 
+int sensorPin = 0;
+void setup() {
+  Serial.begin(9600);
+}
 void loop() {
   float raw = readSensor();
   plotData(raw);
   delay(10);
+}
+float readSensor() {
+  return analogRead(sensorPin);
+}
+
+void plotData(float raw) {
+  Serial.println(raw);
 }
 
 // Upload code to Arduino, open serial plotter, visualize signal. Notice noisy unreadable signal.
