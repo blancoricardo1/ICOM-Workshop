@@ -75,7 +75,8 @@ void setup() {
 
 void loop() {
   float smooth = smoothSignal();
-  plotData(smooth);
+  float bpm = detectBeat(smooth);
+  plotData(smooth,bpm);
   delay(10);
 }
 
@@ -140,4 +141,5 @@ float detectBeat(float smoothValue) {
 }
 
 // CONGRATULATIONS, you have built your first functional Embedded System prototype.
+
 
