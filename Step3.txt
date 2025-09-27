@@ -48,30 +48,7 @@ void plotData(float signal, float bpm) {
   Serial.println(bpm);
 }
 
-// Edit your loop function, add a new float variable "bpm" and pass the "smooth" variable as a parameter.
-// Then, update your plotData function call in the loop to pass both the variables
-// We don't want to visualize this in the Serial Plotter, only watch the value in the Serial Monitor
-// Uncheck "value 2" on the serial plotter, visualize BPM in the second column of the Serial Monitor
-
-// Your new code should look like this
-
-#define SAMP_SIZ 8
-#define RISE_THRESHOLD 5
-
-float prevAvg = 0;
-bool rising = false;
-int riseCount = 0;
-unsigned long lastBeatTime = 0;
-float lastInterval = 0, secondLast = 0, thirdLast = 0;
-float lastValidBPM = 0;
-float readings[SAMP_SIZ] = {0};
-int ptr = 0;
-float sum = 0;
-int sensorPin = 0;
-
-void setup() {
-  Serial.begin(9600);
-}
+// Edit your loop like this 
 
 void loop() {
   float smooth = smoothSignal();
@@ -80,66 +57,8 @@ void loop() {
   delay(10);
 }
 
-float readSensor() {
-  return analogRead(sensorPin);
-}
+// We don't want to visualize this in the Serial Plotter, only watch the value in the Serial Monitor
+// Uncheck "value 2" on the serial plotter, visualize BPM in the second column of the Serial Monitor
 
-void plotData(float signal, float bpm) {
-  Serial.print(signal);
-  Serial.print("\t");
-  Serial.println(bpm);
-}
-
-float smoothSignal() {
-  // Duration of the sampling window in milliseconds
-  const int SAMP_WINDOW_MS = 20;
-
-  // Variables to keep track of the number of samples and their total
-  int count = 0;
-  float total = 0.0;
-  // Record the start time of the sampling window
-  unsigned long start = millis();
-  // Sample the sensor repeatedly for 20ms
-  while (millis() - start < SAMP_WINDOW_MS) {
-    total += readSensor(); // Read from the sensor and add to total
-    count++;               // Increment number of readings taken
-  }
-  float avgSample = total / count;
-
-  sum -= readings[ptr];
-  sum += avgSample;
-
-  readings[ptr] = avgSample;
-  ptr = (ptr + 1) % SAMP_SIZ;
-  return sum / SAMP_SIZ;
-}
-
-float detectBeat(float smoothValue) {
-  float bpm = 0;
-
-  if (smoothValue > prevAvg) {
-    riseCount++;
-    if (!rising && riseCount > RISE_THRESHOLD) {
-      rising = true;
-      unsigned long now = millis();
-      float interval = now - lastBeatTime;
-      lastBeatTime = now;
-
-      bpm = 60000.0 / (0.4 * interval + 0.3 * secondLast + 0.3 * thirdLast);
-      thirdLast = secondLast;
-      secondLast = interval;
-
-      lastValidBPM = bpm; 
-    }
-  } else {
-    rising = false;
-    riseCount = 0;
-  }
-
-  prevAvg = smoothValue;
-  return lastValidBPM;
-}
-
-// CONGRATULATIONS, you have built your first functional Embedded System prototype.
 
 
